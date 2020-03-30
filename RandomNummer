@@ -1,0 +1,30 @@
+#Linear Congruential generator
+
+
+
+#Import 
+import numpy
+
+
+
+#Parameters
+m = 9 #the modulus(bepaald max nummer) later: (2^32)-1
+a = 4 #the multiplier later: 48271
+c = 0 #the increment
+Xzero = 1 #the seed value (deze moet ik er uit laten halen)
+
+
+#We gebruiken een klasse zodat we deze kunnen aanpassen vanuit een functie
+class Nummer:
+    def __init__(self, RandomNummer=None):
+        if RandomNummer is None:
+            self.RandomNummer = (a * Xzero + c) % m
+        else:
+            self.RandomNummer = RandomNummer
+
+        
+n1 = Nummer()
+
+
+for x in range(1000):
+    print(n1.RandomNummer)
