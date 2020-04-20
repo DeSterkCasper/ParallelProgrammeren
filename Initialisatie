@@ -12,3 +12,7 @@ for atoom in range(0, aantalAtomen):
     y_coord = randomnummer(seed=seed)
     z_coord = randomnummer(seed=seed)
     atomenlijst.append([x_coord, y_coord, z_coord])
+
+#Verwijder oude MC_Data
+if os.path.exists('MC_Data'):
+    os.remove('MC_Data')
