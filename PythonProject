@@ -46,7 +46,7 @@ def energieAtoom(atoominMC, atomenlijst, seed):
     i = 0
     for atoom in atomenlijst: #We stellen atoom vast en itereren over alle andere atomen (=> i != seed)
         if i != seed:
-            afstand = afstandberekenen(atoom, atoominMC) #place holder, hier afstand berekenen tussen coordinaten van 2 atomen
+            afstand = afstandberekenen(atoom, atoominMC) #afstand berekenen tussen coordinaten van 2 atomen (1 locked, 1 variabel)
             energie += LennardJones(afstand)
         i += 1
     return energie
