@@ -1,0 +1,103 @@
+#!/usr/bin/python3
+# title             :Project.py
+# description       :Ontwikkel een zo efficiëntmogelijke parallelle Monte Carlo sampler voor N atomen die interageren met een Lennard - Jones potentiaal
+# ======================================================================================================================
+
+# Importing libraries ==================================================================================================
+
+import random 
+import math
+import copy
+import os
+
+
+# The actual script ====================================================================================================
+#Nog ergens buggje in, dat haal ik er later uit
+
+#Parameters
+r =5
+steps=10
+seed=1
+atomenlijst = []
+energielijst = []
+aantalAtomen = 15
+
+#Bepaal een random getal
+def randomnummer(m=100, a=21, c=31,seed=35):
+    return (a * seed +c) % m
+
+#Lennard-Jones:
+def LennardJones(r):
+    tmp = 1.0 / (r*r*r*r*r*r)
+    return tmp * (tmp-1)
+
+#Energie van alle atomen in een configuratie
+def energieConfiguratie(atomenlijst):
+    energie = 0
+    for eersteAtoom in range(0, len(atomenlijst) - 1):
+        for tweedeAtoom in range(eersteAtoom + 1, len(atomenlijst)):  #nog invoegen: (& eersteAtoom < tweedeAtoom)
+            afstand = afstandberekenen(atomenlijst[eersteAtoom], atomenlijst[tweedeAtoom])
+            energie += LennardJones(afstand)
+    return energie
+
+#Energie van 1 atoom berekenen
+def energieAtoom(atoominMC, atomenlijst, seed):
+    energie = 0
+    i = 0
+    for atoom in atomenlijst: #We stellen atoom vast en itereren over alle andere atomen (=> i != seed)
+        if i != seed:
+            afstand = afstandberekenen(atoom, atoominMC) #place holder, hier afstand berekenen tussen coordinaten van 2 atomen
+            energie += LennardJones(afstand)
+        i += 1
+    return energie
+
+#Afstand tussen 2 atomen
+def afstandberekenen(eersteAtoom, tweedeAtoom):
+    x_afstand = (eersteAtoom[0] - tweedeAtoom[0])*(eersteAtoom[0] - tweedeAtoom[0])
+    y_afstand = (eersteAtoom[1] - tweedeAtoom[1])*(eersteAtoom[1] - tweedeAtoom[1])
+    z_afstand = (eersteAtoom[2] - tweedeAtoom[2])*(eersteAtoom[2] - tweedeAtoom[2])
+    return math.sqrt(x_afstand + y_afstand + z_afstand)
+
+# Initialisatie van alle atomen:
+for atoom in range(0, aantalAtomen):
+    x_coord = randomnummer(seed=seed)
+    y_coord = randomnummer(seed=seed)
+    z_coord = randomnummer(seed=seed)
+    atomenlijst.append([x_coord, y_coord, z_coord])
+
+
+# Calculate initial energy
+totaleEnergieConfiguratie = energieConfiguratie(atomenlijst)
+laagsteEnergieConfiguratie = energieConfiguratie()
+
+
+# Monte-Carlo 
+for step in range(0, steps):
+    # Choose a particle to move at random.
+    seed = randomnummer(seed=seed)
+
+    # Move particle and evaluate energy
+    atoominMC = copy.deepcopy(atomenlijst[seed])
+    oudeEnergie = energieAtoom(atoominMC, atomenlijst, seed)
+    seed = randomnummer(seed=seed)
+    atoominMC[0] += (randomnummer(seed=seed)*1/50-1)  #Stapjes van [-1,1[
+    seed = randomnummer(seed=seed)
+    atoominMC[1] += (randomnummer(seed=seed)*1/50-1)
+    seed = randomnummer(seed=seed)
+    atoominMC[2] += (randomnummer(seed=seed)*1/50-1)
+    nieuweEnergie = energieAtoom(atoominMC, atomenlijst, seed)
+    energieVerschil = nieuweEnergie - oudeEnergie
+
+    if energieVerschil < 0:
+        atomenlijst[seed] = atoominMC #Als er een lagere energie wordt bekomen wordt de configuratie bijgehouden
+        laagsteEnergieConfiguratie += energieVerschil #De totale configuratie energie daalt dan met -energieVerschil, dit geeft de energie van de laagste energie configuratie aan
+
+    totaleEnergieConfiguratie = energieVerschil + totaleEnergieConfiguratie
+    standaardafwijking = 6
+   
+
+gemiddeldeEnergieConfiguratie = totaleEnergieConfiguratie/steps
+standaardafwijking = 42
+print(gemiddeldeEnergieConfiguratie)
+print(standaardafwijking)
+
