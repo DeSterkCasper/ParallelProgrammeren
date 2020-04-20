@@ -1,0 +1,12 @@
+# MC
+for step in range(0, steps):
+    # Kies het atoom dat de functie we zullen verplaatsen
+    seed = randomnummer(seed=seed)
+
+    # Verplaats het atoom met random waarden en bereken oude en nieuwe energie
+    atoominMC = copy.deepcopy(atomenlijst[seed])
+    oudeEnergie = energieAtoom(atoominMC, atomenlijst, seed)
+    atoominMC[0] += (randomnummer(seed=seed)/100)
+    atoominMC[1] += (randomnummer(seed=seed)/100)
+    atoominMC[2] += (randomnummer(seed=seed)/100)
+    nieuweEnergie = energieAtoom(atoominMC, atomenlijst, seed)
