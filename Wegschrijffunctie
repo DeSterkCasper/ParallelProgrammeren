@@ -1,0 +1,4 @@
+#De nodige informatie wegschrijven
+def Informatiewegschrijven(step, energie, gemiddelde, standaardafwijking):
+    with open('MC_Data', 'a') as f:
+        f.write('{0} {1}\n'.format(step, energie, gemiddelde, standaardafwijking))
