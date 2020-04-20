@@ -12,7 +12,7 @@ import os
 
 
 # The actual script ====================================================================================================
-#Nog ergens buggje in, dat haal ik er later uit
+#De random nummer generator genereert geen verschillende nummers ivb de scope, hier moet ik nog iets op vinden.
 
 #Parameters
 r =5
@@ -44,7 +44,7 @@ def energieConfiguratie(atomenlijst):
 def energieAtoom(atoominMC, atomenlijst, seed):
     energie = 0
     i = 0
-    for atoom in atomenlijst: #We stellen atoom vast en itereren over alle andere atomen (=> i != seed)
+    for atoom in atomenlijst: #We stellen 1 atoom vast en itereren over alle andere atomen (=> i != seed)
         if i != seed:
             afstand = afstandberekenen(atoom, atoominMC) #afstand berekenen tussen coordinaten van 2 atomen (1 locked, 1 variabel)
             energie += LennardJones(afstand)
