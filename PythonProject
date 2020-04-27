@@ -8,11 +8,12 @@
 import random 
 import math
 import copy
+import numpy as np
 #import os
 
 
 # The actual script ====================================================================================================
-# De random nummer generator genereert geen verschillende nummers ivb de scope, hier moet ik nog iets op vinden.
+# Np arrays insteken voor speed up, maar kunnen niet leeg zijn :( => volgende keer
 
 # Parameters
 r = 5
