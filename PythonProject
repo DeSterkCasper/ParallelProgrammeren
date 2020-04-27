@@ -8,96 +8,104 @@
 import random 
 import math
 import copy
-import os
+#import os
 
 
 # The actual script ====================================================================================================
-#De random nummer generator genereert geen verschillende nummers ivb de scope, hier moet ik nog iets op vinden.
+# De random nummer generator genereert geen verschillende nummers ivb de scope, hier moet ik nog iets op vinden.
 
-#Parameters
-r =5
-steps=10
-seed=1
-atomenlijst = []
-energielijst = []
+# Parameters
+r = 5
+steps = 10
+getallenLijst = []
+atomenLijst = []
+energieLijst = []
 aantalAtomen = 15
 
-#Bepaal een random getal
-def randomnummer(m=100, a=21, c=31,seed=35):
-    return (a * seed +c) % m
+# Bepaal een random getal en voeg ze toe in de getallenLijst
+def randomnummer(m=100, a=21, c=31):
+    if len(getallenLijst) == 0:
+        print("Voor een startgetal in:")
+        getallenLijst.append(int(input()))
+    else:
+        getallenLijst.append((a * getallenLijst[-1] +c) % m)
+    #print("dit is de getallenLijst: ", getallenLijst)
+    return getallenLijst[-1]
 
-#Lennard-Jones:
+# Lennard-Jones:
 def LennardJones(r):
     tmp = 1.0 / (r*r*r*r*r*r)
     return tmp * (tmp-1)
 
-#Energie van alle atomen in een configuratie
-def energieConfiguratie(atomenlijst):
+# Energie van alle atomen in een configuratie
+def energieConfiguratie(atomenLijst):
     energie = 0
-    for eersteAtoom in range(0, len(atomenlijst) - 1):
-        for tweedeAtoom in range(eersteAtoom + 1, len(atomenlijst)):  #nog invoegen: (& eersteAtoom < tweedeAtoom)
-            afstand = afstandberekenen(atomenlijst[eersteAtoom], atomenlijst[tweedeAtoom])
-            energie += LennardJones(afstand)
+    for eersteAtoom in range(0, len(atomenLijst) - 1):
+        for tweedeAtoom in range(eersteAtoom + 1, len(atomenLijst)):  # Invoegen dat (& eersteAtoom < tweedeAtoom)
+            if eersteAtoom < tweedeAtoom:
+                afstand = afstandberekenen(atomenLijst[eersteAtoom], atomenLijst[tweedeAtoom])
+                energie += LennardJones(afstand)
     return energie
 
-#Energie van 1 atoom berekenen
-def energieAtoom(atoominMC, atomenlijst, seed):
+# Energie van 1 atoom berekenen
+def energieAtoom(atoominMC, atomenLijst, seed):
     energie = 0
     i = 0
-    for atoom in atomenlijst: #We stellen 1 atoom vast en itereren over alle andere atomen (=> i != seed)
+    for atoom in atomenLijst: # We stellen atoom vast en itereren over alle andere atomen (=> i != seed)
         if i != seed:
-            afstand = afstandberekenen(atoom, atoominMC) #afstand berekenen tussen coordinaten van 2 atomen (1 locked, 1 variabel)
+            afstand = afstandberekenen(atoom, atoominMC) # Afstand berekenen tussen coordinaten van 2 atomen (1 locked, 1 variabel)
             energie += LennardJones(afstand)
         i += 1
     return energie
 
-#Afstand tussen 2 atomen
+# Afstand tussen 2 atomen
 def afstandberekenen(eersteAtoom, tweedeAtoom):
     x_afstand = (eersteAtoom[0] - tweedeAtoom[0])*(eersteAtoom[0] - tweedeAtoom[0])
     y_afstand = (eersteAtoom[1] - tweedeAtoom[1])*(eersteAtoom[1] - tweedeAtoom[1])
     z_afstand = (eersteAtoom[2] - tweedeAtoom[2])*(eersteAtoom[2] - tweedeAtoom[2])
     return math.sqrt(x_afstand + y_afstand + z_afstand)
 
+
 # Initialisatie van alle atomen:
 for atoom in range(0, aantalAtomen):
-    x_coord = randomnummer(seed=seed)
-    y_coord = randomnummer(seed=seed)
-    z_coord = randomnummer(seed=seed)
-    atomenlijst.append([x_coord, y_coord, z_coord])
+    x_coord = randomnummer()
+    y_coord = randomnummer()
+    z_coord = randomnummer()
+    atomenLijst.append([x_coord, y_coord, z_coord])
+    print(atomenLijst)
 
 
-# Calculate initial energy
-totaleEnergieConfiguratie = energieConfiguratie(atomenlijst)
-laagsteEnergieConfiguratie = energieConfiguratie()
+# Initialisatie energie
+totaleEnergieConfiguratie = energieConfiguratie(atomenLijst)
+laagsteEnergieConfiguratie = energieConfiguratie(atomenLijst)
 
 
-# Monte-Carlo 
+# Monte Carlo
 for step in range(0, steps):
-    # Choose a particle to move at random.
-    seed = randomnummer(seed=seed)
-
-    # Move particle and evaluate energy
-    atoominMC = copy.deepcopy(atomenlijst[seed])
-    oudeEnergie = energieAtoom(atoominMC, atomenlijst, seed)
-    seed = randomnummer(seed=seed)
-    atoominMC[0] += (randomnummer(seed=seed)*1/50-1)  #Stapjes van [-1,1[
-    seed = randomnummer(seed=seed)
-    atoominMC[1] += (randomnummer(seed=seed)*1/50-1)
-    seed = randomnummer(seed=seed)
-    atoominMC[2] += (randomnummer(seed=seed)*1/50-1)
-    nieuweEnergie = energieAtoom(atoominMC, atomenlijst, seed)
+    # Kies een atoom om te beschouw
+    while randomnummer() > 14:
+        randomnummer()
+    seed = getallenLijst[-1]
+    print("We bekijken nu atoomnummer:",seed)
+    
+    # Verplaats dit atoom en bekijk de energie
+    atoominMC = copy.deepcopy(atomenLijst[seed])
+    oudeEnergie = energieAtoom(atoominMC, atomenLijst, seed)
+    atoominMC[0] += (randomnummer()*1/50-1)  # Stapjes van [-1,1[
+    atoominMC[1] += (randomnummer()*1/50-1)
+    atoominMC[2] += (randomnummer()*1/50-1)
+    nieuweEnergie = energieAtoom(atoominMC, atomenLijst, seed)
     energieVerschil = nieuweEnergie - oudeEnergie
 
     if energieVerschil < 0:
-        atomenlijst[seed] = atoominMC #Als er een lagere energie wordt bekomen wordt de configuratie bijgehouden
-        laagsteEnergieConfiguratie += energieVerschil #De totale configuratie energie daalt dan met -energieVerschil, dit geeft de energie van de laagste energie configuratie aan
+        atomenLijst[seed] = atoominMC # Als er een lagere energie wordt bekomen wordt de configuratie bijgehouden
+        laagsteEnergieConfiguratie += energieVerschil # De totale configuratie energie daalt dan met -energieVerschil, dit geeft de energie van de laagste energie configuratie aan
 
-    totaleEnergieConfiguratie = energieVerschil + totaleEnergieConfiguratie
-    standaardafwijking = 6
-   
+    totaleEnergieConfiguratie = energieVerschil + totaleEnergieConfiguratie # De totale energie van alle configuraties optellen
+    standaardafwijking = 6  # Hier nog formule voor schrijven
+    
 
 gemiddeldeEnergieConfiguratie = totaleEnergieConfiguratie/steps
-standaardafwijking = 42
 print(gemiddeldeEnergieConfiguratie)
 print(standaardafwijking)
 
