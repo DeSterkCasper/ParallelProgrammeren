@@ -24,15 +24,15 @@ def randomnummer(m=hoeveelheid, a=21, c=31, startgetal=startgetal):
     #print("lijst ", lijstMetGetallen)
     return lijstMetGetallen[-1]
 
-# Code die loopt over die genoeg getallen geneert voor LCG te kunnen timen
+# Code die genoeg getallen geneert voor LCG te kunnen timen
 def runnerLCG():
-    print('LCG')
+    #print('LCG')
     for x in range(hoeveelheid):
         randomnummer()
 
-# Code die loopt over die genoeg getallen geneert voor NP te kunnen timen
-def runnerNumpy():
-    print('Numpy')
+# Code die genoeg getallen geneert voor NP te kunnen timen
+def runnerNP():
+    #print('Numpy')
     for x in range(hoeveelheid):
         numpy.random.randint(0, hoeveelheid)
 
