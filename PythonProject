@@ -45,6 +45,8 @@ def energieConfiguratie(atomenLijst):
             if eersteAtoom < tweedeAtoom:
                 afstand = afstandberekenen(atomenLijst[eersteAtoom], atomenLijst[tweedeAtoom])
                 energie += LennardJones(afstand)
+                #print("Voor de set", eersteAtoom, tweedeAtoom, "vinden we een LJ van:", LennardJones(afstand), "op een afstand:", afstand)
+    print("De energie van deze configuratie is dan:", energie)
     return energie
 
 # Energie van 1 atoom berekenen
@@ -55,7 +57,9 @@ def energieAtoom(atoominMC, atomenLijst, seed):
         if i != seed:
             afstand = afstandberekenen(atoom, atoominMC) # Afstand berekenen tussen coordinaten van 2 atomen (1 locked, 1 variabel)
             energie += LennardJones(afstand)
+            #print("Voor het", i, "de atoom met LJ:", LennardJones(afstand), "op een afstand van:", afstand)
         i += 1
+    print("De energie van dit atoom is dan:", energie)
     return energie
 
 # Afstand tussen 2 atomen
@@ -77,13 +81,12 @@ for atoom in range(0, aantalAtomen):
 
 # Initialisatie energie
 totaleEnergieConfiguratie = energieConfiguratie(atomenLijst)
-laagsteEnergieConfiguratie = energieConfiguratie(atomenLijst)
-
+laagsteEnergieConfiguratie = totaleEnergieConfiguratie
 
 # Monte Carlo
 for step in range(0, steps):
     # Kies een atoom om te beschouw
-    while randomnummer() > 14:
+    while randomnummer() > (aantalAtomen-1):
         randomnummer()
     seed = getallenLijst[-1]
     print("We bekijken nu atoomnummer:",seed)
@@ -99,6 +102,7 @@ for step in range(0, steps):
 
     if energieVerschil < 0:
         atomenLijst[seed] = atoominMC # Als er een lagere energie wordt bekomen wordt de configuratie bijgehouden
+        print("Het energieverschil is negatief, namelijk:", energieVerschil, "De configuratie wordt bijgehouden;", atoominMC)
         laagsteEnergieConfiguratie += energieVerschil # De totale configuratie energie daalt dan met -energieVerschil, dit geeft de energie van de laagste energie configuratie aan
 
     totaleEnergieConfiguratie = energieVerschil + totaleEnergieConfiguratie # De totale energie van alle configuraties optellen
@@ -107,5 +111,6 @@ for step in range(0, steps):
 
 gemiddeldeEnergieConfiguratie = totaleEnergieConfiguratie/steps
 print(gemiddeldeEnergieConfiguratie)
+print(laagsteEnergieConfiguratie)
 print(standaardafwijking)
 
