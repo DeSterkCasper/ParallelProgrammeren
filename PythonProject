@@ -35,6 +35,8 @@ def randomnummer(m=100, a=21, c=31):
 
 # Lennard-Jones:
 def LennardJones(r):
+    if r <0:
+        print("Warning, afstand kleiner dan 0")
     tmp = 1.0 / (r*r*r*r*r*r)
     return tmp * (tmp-1)
 
@@ -42,7 +44,7 @@ def LennardJones(r):
 def energieConfiguratie(atomenLijst):
     energie = 0
     for eersteAtoom in range(0, len(atomenLijst) - 1):
-        for tweedeAtoom in range(eersteAtoom + 1, len(atomenLijst)):  # Invoegen dat (& eersteAtoom < tweedeAtoom)
+        for tweedeAtoom in range(eersteAtoom + 1, len(atomenLijst)):  
             if eersteAtoom < tweedeAtoom:
                 afstand = afstandberekenen(atomenLijst[eersteAtoom], atomenLijst[tweedeAtoom])
                 energie += LennardJones(afstand)
@@ -107,11 +109,13 @@ for step in range(0, steps):
         laagsteEnergieConfiguratie += energieVerschil # De totale configuratie energie daalt dan met -energieVerschil, dit geeft de energie van de laagste energie configuratie aan
 
     totaleEnergieConfiguratie = energieVerschil + totaleEnergieConfiguratie # De totale energie van alle configuraties optellen
-    standaardafwijking = 6  # Hier nog formule voor schrijven
-    
+    energieLijst.append(totaleEnergieConfiguratie)
+    #print(energieLijst)
 
 gemiddeldeEnergieConfiguratie = totaleEnergieConfiguratie/steps
-print(gemiddeldeEnergieConfiguratie)
-print(laagsteEnergieConfiguratie)
-print(standaardafwijking)
+standaardafwijking = np.std(energieLijst)
+print("De gemiddelde energie van alle configuraties bedraagt:",gemiddeldeEnergieConfiguratie)
+print("De laagste energie uit configuraties bedraagt:", laagsteEnergieConfiguratie)
+print("De standaardafwijking van alle configuraties bedraagt:", standaardafwijking)
+
 
