@@ -1,12 +1,18 @@
-#Linear Congruential generator
+!/usr/bin/python3
+# title             :Randomnummer.py
+# description       :Ontwikkel een zo efficiëntmogelijke parallelle Monte Carlo sampler voor N atomen die interageren met een Lennard - Jones potentiaal
+# ======================================================================================================================
 
-#Import 
+# Importing libraries ==================================================================================================
+
 import numpy
 
-#Parameters
+# The actual script ====================================================================================================
+
+# Parameters
 lijstMetGetallen = []
 
-#Generator
+# Linear Congruential generator
 def randomnummer(m=100, a=21, c=31):
     if len(lijstMetGetallen) == 0:
         print("Voor een startgetal in:")
