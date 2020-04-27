@@ -25,7 +25,7 @@ aantalAtomen = 15
 # Bepaal een random getal en voeg ze toe in de getallenLijst
 def randomnummer(m=100, a=21, c=31):
     if len(getallenLijst) == 0:
-        print("Voor een startgetal in:")
+        print("Voer een startgetal in:")
         getallenLijst.append(int(input()))
     else:
         getallenLijst.append((a * getallenLijst[-1] +c) % m)
