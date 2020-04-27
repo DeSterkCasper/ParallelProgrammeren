@@ -1,18 +1,17 @@
 #Linear Congruential generator
 
-
-
 #Import 
 import numpy
 
+#Parameters
+lijstMetGetallen = []
 
-#Linear Congruential generator
-import numpy
-seed =1
-
-def randomnummer(m=100, a=21, c=31,seed=35):
-    return (a * seed +c) % m
-
-for x in range(1000):
-    seed = randomnummer(seed=seed)
-    print(seed)
+#Generator
+def randomnummer(m=100, a=21, c=31):
+    if len(lijstMetGetallen) == 0:
+        print("Voor een startgetal in:")
+        lijstMetGetallen.append(int(input()))
+    else:
+        lijstMetGetallen.append((a * lijstMetGetallen[-1] +c) % m)
+    print("lijst ", lijstMetGetallen)
+    return lijstMetGetallen[-1]
