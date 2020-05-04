@@ -45,7 +45,7 @@ def energieConfiguratie(atomenLijst):
     energie = 0
     for eersteAtoom in range(0, len(atomenLijst) - 1):
         for tweedeAtoom in range(eersteAtoom + 1, len(atomenLijst)):  
-            if eersteAtoom < tweedeAtoom:
+            if eersteAtoom < tweedeAtoom:                                #Deze en de vorige 2 lijnen optimaliseren deze berekening zodat er geen paar dubbel wordt berekend
                 afstand = afstandberekenen(atomenLijst[eersteAtoom], atomenLijst[tweedeAtoom])
                 energie += LennardJones(afstand)
                 #print("Voor de set", eersteAtoom, tweedeAtoom, "vinden we een LJ van:", LennardJones(afstand), "op een afstand:", afstand)
@@ -88,7 +88,7 @@ laagsteEnergieConfiguratie = totaleEnergieConfiguratie
 
 # Monte Carlo
 for step in range(0, steps):
-    # Kies een atoom om te beschouw
+    # Kies een atoom om te beschouwen
     while randomnummer() > (aantalAtomen-1):
         randomnummer()
     seed = getallenLijst[-1]
